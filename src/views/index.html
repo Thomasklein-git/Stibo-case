@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport">
+    <title>Doc</title>
+</head>
+<body>
+    <h2 class="Header">Users</h2>
+    <div class="Users" id='users'></div>
+    <script>
+        init()
+
+        async function init() {
+            const users = await getUsers();
+            createFrontPage(users);
+        }
+
+        async function getUsers() {
+            const users = await fetch('http://localhost:3000/api/user');
+            return await users.json();
+        }
+
+        function createFrontPage(users) {
+            const usersContainer = document.getElementById('users');
+            var template = '';
+            for(const user of users.users) {
+                template += `
+                <p><a href="http://localhost:3000/user/${user.id}">${user.name}</a>, ${user.company.catchPhrase}</p>
+                `
+            };
+
+            usersContainer.innerHTML = template;
+        }
+    </script>
+</body>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport">
+    <title>Doc</title>
+</head>
+<body>
+    <div class="User" id='user'></div>
+    <div class="Posts" id='posts'></div>
+    <script>
+        init()
+
+        async function init() {
+            const userWithPosts = await getUserWithPosts();
+            console.log(userWithPosts);
+            createUserPage(userWithPosts.user);
+            createPosts(userWithPosts.posts);
+        }
+
+        async function getUserWithPosts() {
+            const users = await fetch('http://localhost:3000/api/user/' + getIdFromURL());
+            return await users.json();
+        }
+
+        function getIdFromURL() {
+            const url = window.location.href;
+            const id = url.substring(url.lastIndexOf('/')+1);
+            return id;
+        }
+
+        function createUserPage(user) {
+            const usersContainer = document.getElementById('user');
+            const template = `<h2>${user.name}s blog</h2>`;
+            usersContainer.innerHTML = template;
+        }
+
+        function createPosts(posts) {
+            const postContainer = document.getElementById('posts')
+            var template = ''
+            for(const post of posts) {
+                template += `
+                <h4>${post.title}</h4>
+                <p>${post.body}</p>
+                `
+            }
+            postContainer.innerHTML = template
+        }
+    </script>
+</body>
